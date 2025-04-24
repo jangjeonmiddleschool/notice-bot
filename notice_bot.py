@@ -1,16 +1,17 @@
 from flask import Flask, request, jsonify
+import os
+import json
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
 app = Flask(__name__)
 
-# Google Drive API 인증 설정
-SERVICE_ACCOUNT_FILE = 'credentials.json'  # 서비스 계정 키 JSON 파일 경로
+# Google Drive API 인증 설정 - 환경변수에서 JSON 로드
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 FOLDER_ID = '1L-zGDaoyRvkq8KsV9lc5yznxSXVuQayx'  # 공유 폴더 ID
 
-credentials = service_account.Credentials.from_service_account_file(
-    SERVICE_ACCOUNT_FILE, scopes=SCOPES)
+info = json.loads(os.environ['GOOGLE_CREDENTIALS'])
+credentials = service_account.Credentials.from_service_account_info(info, scopes=SCOPES)
 drive_service = build('drive', 'v3', credentials=credentials)
 
 # 파일 목록 가져오기 함수
@@ -43,8 +44,8 @@ def notice_list():
             "outputs": [
                 {
                     "basicCard": {
-                        "title": "📎 가정통신문 목록",
-                        "description": "선택하신 것을 누르세요",
+                        "title": "\ud83d\udcce \uac00\uc815\ud1b5\uc2e0\ubb38 \ubaa9\ub85d",
+                        "description": "\uc120\ud0dd\ud558\uc2e0 \uac83\uc744 \ub204\ub974\uc138\uc694",
                         "buttons": buttons
                     }
                 }
